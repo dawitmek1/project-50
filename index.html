@@ -7,115 +7,121 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="7 Disciplines"/>
 <meta name="mobile-web-app-capable" content="yes"/>
-<meta name="theme-color" content="#FF6B1A"/>
-<meta name="description" content="Your daily 7-discipline tracker — wake up, read, exercise, pray, skill work, reflect, progress photo."/>
+<meta name="theme-color" id="tmeta" content="#07070F"/>
 <link rel="manifest" href="/project-50/manifest.json"/>
-<!-- Apple splash screens -->
-<link rel="apple-touch-startup-image" href="/project-50/splash.svg"/>
 <title>7 Disciplines</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700;800&display=swap');
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{
   --bg:#07070F;--sur:#0F0F1A;--c1:#141420;--c2:#1A1A28;
-  --acc:#FF6B1A;--acc2:#FF9A4D;--grn:#16A34A;--grn2:#22C55E;
-  --red:#DC2626;--gold:#F59E0B;--blu:#38BDF8;--pur:#A78BFA;
-  --txt:#F2EEF8;--txt2:#BDB8D0;--sub:#5A5870;--bdr:rgba(255,255,255,0.07);
-  --r:15px;--safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);
+  --acc:#FF6B1A;--grn:#22C55E;--red:#EF4444;--gold:#F59E0B;--blu:#38BDF8;
+  --txt:#F2EEF8;--txt2:#BDB8D0;--sub:#5A5870;--bdr:rgba(255,255,255,0.08);
+  --r:15px;
+  --st:env(safe-area-inset-top,0px);
+  --sb:env(safe-area-inset-bottom,0px);
+  --sl:env(safe-area-inset-left,0px);
+  --sr:env(safe-area-inset-right,0px);
 }
 .lt{
-  --bg:#F7F4EE;--sur:#EDE9DF;--c1:#FFFFFF;--c2:#F0ECE4;
-  --txt:#1C1828;--txt2:#4A4560;--sub:#9490A8;--bdr:rgba(0,0,0,0.08);
+  --bg:#F5F2EB;--sur:#EDE9DF;--c1:#FFFFFF;--c2:#EAE6DC;
+  --txt:#1C1828;--txt2:#4A4560;--sub:#9490A8;--bdr:rgba(0,0,0,0.09);
 }
-
 /* ── SPLASH ── */
 #splash{
-  position:fixed;inset:0;z-index:9999;
-  background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;
-  transition:opacity .5s ease, transform .5s ease;
+  position:fixed;inset:0;z-index:9999;background:#07070F;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity .5s ease,transform .5s ease;
 }
-#splash.hide{opacity:0;transform:scale(1.04);pointer-events:none;}
-.splash-ring{position:relative;width:130px;height:130px;margin-bottom:28px;}
-.splash-ring svg{position:absolute;inset:0;}
-.splash-title{font-family:'DM Serif Display',serif;font-size:42px;color:var(--txt);letter-spacing:-2px;line-height:1;margin-bottom:8px;}
-.splash-sub{font-size:13px;color:var(--sub);letter-spacing:1.5px;text-transform:uppercase;font-weight:600;}
-.splash-dots{display:flex;gap:7px;margin-top:48px;}
-.dot{width:7px;height:7px;border-radius:50%;background:var(--bdr);animation:pulse 1.4s ease infinite;}
-.dot:nth-child(2){animation-delay:.2s;}
-.dot:nth-child(3){animation-delay:.4s;}
-@keyframes pulse{0%,80%,100%{background:var(--bdr);}40%{background:var(--acc);}}
-
+#splash.out{opacity:0;transform:scale(1.06);pointer-events:none;}
+.sp-ring{position:relative;width:144px;height:144px;}
+.sp-ring svg{position:absolute;inset:0;}
+.sp-inner{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+@keyframes rsp{from{stroke-dashoffset:395}to{stroke-dashoffset:99}}
+@keyframes fup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dpulse{0%,80%,100%{background:rgba(255,255,255,.12)}40%{background:#FF6B1A}}
+.sa{animation:fup .55s both;}
+.sa1{animation-delay:.75s}
+.sa2{animation-delay:.92s}
+.sa3{animation-delay:1.05s}
+.sa4{animation-delay:1.18s}
 /* ── APP SHELL ── */
-html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);}
+html,body{width:100%;height:100%;overflow:hidden;background:#07070F;}
 #app{
-  width:100%;max-width:430px;margin:0 auto;
-  height:100%;display:flex;flex-direction:column;
-  background:var(--bg);font-family:'DM Sans',sans-serif;
-  color:var(--txt);transition:background .3s,color .3s;
-  padding-top:var(--safe-top);
+  position:fixed;inset:0;display:flex;flex-direction:column;
+  background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--txt);
+  transition:background .3s,color .3s;
+  padding-top:var(--st);padding-left:var(--sl);padding-right:var(--sr);
 }
+/* ── STATUS BAR ── */
+#sbar{
+  flex-shrink:0;background:var(--bg);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:11px 22px 2px;transition:background .3s;
+}
+/* ── SCREENS ── */
 .sc{display:none;flex-direction:column;flex:1;overflow-y:auto;background:var(--bg);transition:background .3s;}
 .sc.on{display:flex;}
 .sc::-webkit-scrollbar{display:none;}.sc{scrollbar-width:none;}
-
-/* ── STATUS BAR ── */
-#sbar{padding:12px 24px 0;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:var(--bg);transition:background .3s;}
-
-/* ── BOTTOM NAV ── */
+/* ── NAV ── */
 #bnav{
-  background:var(--sur);border-top:.5px solid var(--bdr);
-  display:flex;flex-shrink:0;
-  padding-bottom:max(var(--safe-bot),8px);
-  transition:background .3s,border-color .3s;
+  flex-shrink:0;background:var(--sur);border-top:.5px solid var(--bdr);display:flex;
+  padding-bottom:max(var(--sb),8px);transition:background .3s,border-color .3s;
 }
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 4px;cursor:pointer;}
 .ni span{font-size:8px;color:var(--sub);font-weight:700;letter-spacing:.8px;text-transform:uppercase;transition:color .2s;}
 .ni.act span{color:var(--acc);}
-
-/* ── CARDS & TASKS ── */
+/* ── COMPONENTS ── */
 .card{background:var(--c1);border-radius:var(--r);border:.5px solid var(--bdr);transition:background .3s,border-color .3s;}
 .sh{font-size:9px;font-weight:700;color:var(--sub);letter-spacing:1.6px;text-transform:uppercase;}
-.ti{display:flex;align-items:center;gap:12px;padding:13px 16px;min-height:70px;border-bottom:.5px solid var(--bdr);cursor:pointer;transition:background .1s;position:relative;}
+.ti{display:flex;align-items:center;gap:12px;padding:13px 16px;min-height:70px;border-bottom:.5px solid var(--bdr);cursor:pointer;transition:background .1s;}
 .ti:last-child{border-bottom:none;}
 .ti:active{background:rgba(255,107,26,.04);}
 .tic{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;transition:opacity .2s;}
 .tin{font-size:13.5px;font-weight:700;color:var(--txt);margin-bottom:2px;line-height:1.25;transition:color .2s;}
 .tis{font-size:10.5px;color:var(--sub);line-height:1.3;}
-.tck{width:27px;height:27px;border-radius:50%;border:1.5px solid var(--bdr);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .22s;background:transparent;}
-.tck.done{background:var(--grn2);border-color:var(--grn2);}
+.tck{width:27px;height:27px;border-radius:50%;border:1.5px solid var(--bdr);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .22s;}
+.tck.done{background:var(--grn);border-color:var(--grn);}
 .ti.done .tin{color:var(--sub);text-decoration:line-through;}
 .ti.done .tic{opacity:.35;}
-
-/* ── WATER ── */
 .wg{flex:1;min-width:0;height:38px;border-radius:8px;border:1.5px solid var(--bdr);cursor:pointer;display:flex;align-items:center;justify-content:center;background:transparent;transition:all .14s;}
 .wg.f{background:#0284C7;border-color:#0284C7;}
 .wg:active{transform:scale(.88);}
-
 /* ── MODALS ── */
-.modal{position:fixed;left:0;right:0;bottom:0;max-width:430px;margin:0 auto;background:var(--sur);border-radius:28px 28px 0 0;z-index:200;transform:translateY(110%);transition:transform .36s cubic-bezier(.32,0,.18,1);overflow-y:auto;max-height:92vh;scrollbar-width:none;padding-bottom:max(var(--safe-bot),20px);}
-.modal::-webkit-scrollbar{display:none;}
+.modal{
+  position:fixed;left:0;right:0;bottom:0;
+  background:var(--sur);border-radius:26px 26px 0 0;z-index:200;
+  transform:translateY(110%);overflow-y:auto;max-height:94%;
+  padding-bottom:max(var(--sb),22px);
+  transition:transform .36s cubic-bezier(.32,0,.18,1),background .3s;
+}
+.modal::-webkit-scrollbar{display:none;}.modal{scrollbar-width:none;}
 .modal.open{transform:translateY(0);}
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:190;opacity:0;pointer-events:none;transition:opacity .28s;}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.74);z-index:190;opacity:0;pointer-events:none;transition:opacity .28s;}
 .ov.open{opacity:1;pointer-events:all;}
-.drag-bar{display:flex;justify-content:center;padding:12px 0 4px;}
-.drag-bar div{width:36px;height:4px;background:var(--bdr);border-radius:2px;}
-.mdbtn{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 2px;border-radius:12px;border:1.5px solid var(--bdr);cursor:pointer;transition:all .18s;background:transparent;}
+.drag{display:flex;justify-content:center;padding:12px 0 4px;}
+.drag div{width:36px;height:4px;background:var(--bdr);border-radius:2px;}
+.fl{font-size:9.5px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;}
+.finp{width:100%;background:var(--c2);border:1px solid var(--bdr);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--txt);outline:none;font-family:'DM Sans',sans-serif;resize:none;transition:border .2s,background .3s;line-height:1.65;}
+.finp:focus{border-color:rgba(255,107,26,.5);}
+.finp::placeholder{color:var(--sub);}
+.mdbtn{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 2px;border-radius:12px;border:1.5px solid var(--bdr);cursor:pointer;transition:all .18s;}
 .mdbtn.sel{background:rgba(255,107,26,.12);border-color:rgba(255,107,26,.5);}
 .mdbtn em{font-size:22px;font-style:normal;line-height:1;}
 .mdbtn s{font-size:7.5px;color:var(--sub);font-weight:700;letter-spacing:.3px;text-transform:uppercase;text-decoration:none;}
 .mdbtn.sel s{color:var(--acc);}
 .edot{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--bdr);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--sub);transition:all .15s;}
 .edot.on{background:var(--acc);border-color:var(--acc);color:#fff;}
-.finp{width:100%;background:var(--c2);border:1px solid var(--bdr);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--txt);outline:none;font-family:'DM Sans',sans-serif;resize:none;transition:border .2s,background .3s;line-height:1.65;}
-.finp:focus{border-color:rgba(255,107,26,.5);}
-.finp::placeholder{color:var(--sub);}
-.fl{font-size:9.5px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:8px;}
-
-/* ── JOURNAL LIST ── */
+/* ── JOURNAL ── */
+.tab-pill{flex:1;padding:9px 4px;text-align:center;font-size:12px;font-weight:700;color:var(--sub);border-radius:10px;cursor:pointer;transition:all .2s;letter-spacing:.3px;}
+.tab-pill.on{background:var(--c1);color:var(--txt);}
 .jc{background:var(--c1);border-radius:14px;border:.5px solid var(--bdr);border-left-width:3px;padding:15px 16px;margin-bottom:10px;cursor:pointer;transition:background .12s;}
 .jc:active{background:var(--c2);}
-
+/* ── PHOTO GALLERY ── */
+.pg{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:0 0 20px;}
+.pg-cell{position:relative;aspect-ratio:1;overflow:hidden;border-radius:8px;cursor:pointer;background:var(--c2);}
+.pg-cell img{width:100%;height:100%;object-fit:cover;display:block;}
+.pg-day{position:absolute;bottom:5px;left:6px;background:rgba(0,0,0,.65);border-radius:5px;padding:2px 7px;font-size:10px;font-weight:700;color:#fff;}
 /* ── STATS ── */
 .scard{flex:1;min-width:0;background:var(--c1);border-radius:13px;padding:13px 6px;text-align:center;border:.5px solid var(--bdr);}
 .sv{font-size:21px;font-weight:800;letter-spacing:-1px;margin-bottom:3px;line-height:1;}
@@ -124,76 +130,84 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);}
 .pbr:last-child{border-bottom:none;}
 .pbb{height:5px;background:var(--c2);border-radius:3px;flex:1;overflow:hidden;}
 .pbi{height:100%;background:var(--acc);border-radius:3px;transition:width .5s;}
-
-/* ── UPLOAD ── */
-.pu{border:1.5px dashed rgba(255,107,26,.3);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;padding:30px 20px;transition:all .18s;background:rgba(255,107,26,.03);}
-.pu:active{border-color:var(--acc);background:rgba(255,107,26,.07);}
-
-/* ── THEME TOGGLE ── */
-.thbtn{width:40px;height:23px;border-radius:12px;border:.5px solid var(--bdr);cursor:pointer;display:flex;align-items:center;padding:2px;transition:background .25s;}
+.pu{border:1.5px dashed rgba(255,107,26,.28);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;cursor:pointer;padding:30px 20px;transition:all .18s;background:rgba(255,107,26,.03);}
+.pu:active{border-color:var(--acc);}
+.thbtn{width:40px;height:23px;border-radius:12px;border:.5px solid var(--bdr);cursor:pointer;display:flex;align-items:center;padding:2px;transition:all .25s;}
 .thbtn .knob{width:18px;height:18px;border-radius:50%;background:var(--sub);transition:all .25s;}
 .thbtn.on{background:rgba(255,107,26,.15);border-color:rgba(255,107,26,.4);}
 .thbtn.on .knob{transform:translateX(17px);background:var(--acc);}
-
-/* ── BUTTONS ── */
-.btn-primary{width:100%;padding:16px;background:var(--acc);border:none;border-radius:14px;font-size:15.5px;font-weight:700;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s,transform .1s;letter-spacing:.2px;}
-.btn-primary:active{opacity:.88;transform:scale(.98);}
-.btn-primary:disabled{opacity:.32;cursor:default;}
-
-/* ── ENTRY VIEW ── */
+.btn-p{width:100%;padding:16px;background:var(--acc);border:none;border-radius:14px;font-size:15.5px;font-weight:700;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s,transform .1s;letter-spacing:.2px;}
+.btn-p:active{opacity:.88;transform:scale(.98);}
+.btn-p:disabled{opacity:.32;}
 .ev-sec{margin-bottom:15px;}
 .ev-lbl{font-size:9px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px;}
 .ev-box{font-size:13px;color:var(--txt);background:var(--c2);padding:12px 14px;border-radius:11px;line-height:1.7;border:.5px solid var(--bdr);}
-
-/* ── JOURNEY GRID ── */
-.cgrid-item{width:100%;aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;cursor:pointer;transition:transform .1s;}
-.cgrid-item:active{transform:scale(.88);}
 </style>
 </head>
 <body>
 
-<!-- ══════════════════ SPLASH SCREEN ══════════════════ -->
+<!-- ═══════ SPLASH ═══════ -->
 <div id="splash">
-  <div class="splash-ring">
-    <svg width="130" height="130" viewBox="0 0 130 130">
-      <circle cx="65" cy="65" r="55" fill="none" stroke="rgba(255,107,26,.15)" stroke-width="8"/>
-      <circle cx="65" cy="65" r="55" fill="none" stroke="#FF6B1A" stroke-width="8" stroke-linecap="round"
-        stroke-dasharray="345.6" stroke-dashoffset="86.4"
-        style="transform:rotate(-90deg);transform-origin:65px 65px;animation:ring-in 1.4s cubic-bezier(.4,0,.2,1) forwards;"/>
-      <style>@keyframes ring-in{from{stroke-dashoffset:345.6}to{stroke-dashoffset:86.4}}</style>
+  <div class="sp-ring" style="margin-bottom:28px;">
+    <svg width="144" height="144" viewBox="0 0 144 144">
+      <circle cx="72" cy="72" r="62" fill="none" stroke="rgba(255,107,26,.1)" stroke-width="8.5"/>
+      <circle cx="72" cy="72" r="62" fill="none" stroke="rgba(255,107,26,.28)" stroke-width="8.5" stroke-dasharray="395" stroke-dashoffset="99" style="transform:rotate(-90deg);transform-origin:72px 72px;"/>
+      <circle cx="72" cy="72" r="62" fill="none" stroke="#FF6B1A" stroke-width="8.5" stroke-linecap="round"
+        stroke-dasharray="395" stroke-dashoffset="395"
+        style="transform:rotate(-90deg);transform-origin:72px 72px;animation:rsp 1.3s cubic-bezier(.4,0,.2,1) .25s forwards;"/>
     </svg>
-    <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-      <div style="font-family:'DM Serif Display',serif;font-size:38px;color:#F2EEF8;line-height:1;letter-spacing:-2px;">7</div>
-      <div style="font-size:9px;font-weight:700;color:#FF6B1A;letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;">Disciplines</div>
+    <div class="sp-inner">
+      <div style="font-family:'DM Serif Display',serif;font-size:46px;color:#F2EEF8;line-height:1;letter-spacing:-2.5px;">7</div>
+      <div style="font-size:9px;font-weight:700;color:#FF6B1A;letter-spacing:2.5px;text-transform:uppercase;margin-top:2px;">Disciplines</div>
     </div>
   </div>
-  <div class="splash-title">Build yourself.</div>
-  <div class="splash-sub">Every single day</div>
-  <div style="margin-top:24px;font-size:11px;color:#5A5870;text-align:center;line-height:1.7;padding:0 40px;">Wake up · Read · Exercise · Pray<br>Skill work · Reflect · Photo</div>
-  <div class="splash-dots">
-    <div class="dot"></div>
-    <div class="dot"></div>
-    <div class="dot"></div>
+  <div class="sa sa1" style="font-family:'DM Serif Display',serif;font-size:40px;color:#F2EEF8;letter-spacing:-2px;line-height:1;">Build yourself.</div>
+  <div class="sa sa2" style="font-size:11px;color:#FF6B1A;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;margin-top:8px;">Every single day</div>
+  <div class="sa sa3" style="font-size:11.5px;color:#5A5870;text-align:center;line-height:1.85;margin-top:22px;padding:0 44px;">Wake up &nbsp;·&nbsp; Read &nbsp;·&nbsp; Exercise<br>Pray &nbsp;·&nbsp; Skill &nbsp;·&nbsp; Reflect &nbsp;·&nbsp; Photo</div>
+  <div class="sa sa4" style="display:flex;gap:8px;margin-top:44px;">
+    <div style="width:7px;height:7px;border-radius:50%;animation:dpulse 1.4s ease infinite;"></div>
+    <div style="width:7px;height:7px;border-radius:50%;animation:dpulse 1.4s ease .2s infinite;"></div>
+    <div style="width:7px;height:7px;border-radius:50%;animation:dpulse 1.4s ease .4s infinite;"></div>
   </div>
 </div>
 
-<!-- ══════════════════ APP ══════════════════ -->
+<!-- ═══════ APP ═══════ -->
 <div id="app">
 
-  <!-- Status bar -->
+  <!-- STATUS BAR -->
   <div id="sbar">
-    <span style="font-size:14.5px;font-weight:700;color:var(--txt);" id="clk">9:41</span>
-    <svg width="50" height="12" viewBox="0 0 50 12" style="color:var(--txt);"><rect x="0" y="3" width="3" height="8" rx="1" fill="currentColor" opacity=".3"/><rect x="5" y="1.5" width="3" height="9.5" rx="1" fill="currentColor" opacity=".55"/><rect x="10" y=".5" width="3" height="11" rx="1" fill="currentColor"/><rect x="16" y="1.5" width="3.5" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1"/><rect x="16.5" y="3" width="2" height="6" rx=".5" fill="currentColor"/></svg>
+    <span style="font-size:15px;font-weight:700;color:var(--txt);letter-spacing:-.3px;" id="clk">9:41</span>
+    <div style="display:flex;align-items:center;gap:5px;color:var(--txt);">
+      <!-- Signal -->
+      <svg width="17" height="13" viewBox="0 0 17 13" fill="none">
+        <rect x="0" y="9" width="3" height="4" rx="1" fill="currentColor" opacity=".35"/>
+        <rect x="4.5" y="6" width="3" height="7" rx="1" fill="currentColor" opacity=".6"/>
+        <rect x="9" y="3" width="3" height="10" rx="1" fill="currentColor" opacity=".82"/>
+        <rect x="13.5" y="0" width="3" height="13" rx="1" fill="currentColor"/>
+      </svg>
+      <!-- WiFi -->
+      <svg width="17" height="13" viewBox="0 0 17 13" fill="none">
+        <path d="M8.5 11.5a1.1 1.1 0 110-2.2 1.1 1.1 0 010 2.2z" fill="currentColor"/>
+        <path d="M4.8 8.2C5.9 7.1 7.1 6.5 8.5 6.5s2.6.6 3.7 1.7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <path d="M1.5 5C3.4 3.1 5.8 2 8.5 2s5.1 1.1 7 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".45"/>
+      </svg>
+      <!-- Battery -->
+      <svg width="26" height="13" viewBox="0 0 26 13" fill="none">
+        <rect x=".6" y=".6" width="22" height="11.8" rx="3" stroke="currentColor" stroke-width="1.2" opacity=".65"/>
+        <rect x="2.2" y="2.2" width="15" height="8.6" rx="1.5" fill="currentColor"/>
+        <path d="M23.8 4.8v3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".55"/>
+      </svg>
+    </div>
   </div>
 
   <!-- ═══ TODAY ═══ -->
   <div class="sc on" id="s-today">
-    <div style="padding:10px 20px 6px;display:flex;justify-content:space-between;align-items:flex-start;">
+    <div style="padding:9px 20px 5px;display:flex;justify-content:space-between;align-items:flex-start;">
       <div>
         <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;color:var(--sub);text-transform:uppercase;" id="hdate">Thu, Mar 19</div>
         <div style="font-size:26px;font-weight:800;color:var(--txt);letter-spacing:-1px;margin-top:2px;font-family:'DM Serif Display',serif;">Day <span id="hday">1</span><span style="color:var(--sub);font-weight:400;font-size:17px;font-family:'DM Sans',sans-serif;"> / 75</span></div>
       </div>
-      <div style="display:flex;align-items:center;gap:9px;margin-top:6px;">
+      <div style="display:flex;align-items:center;gap:9px;margin-top:5px;">
         <div style="display:flex;align-items:center;gap:6px;">
           <span style="font-size:12px;" id="th-icon">🌙</span>
           <div class="thbtn" id="thbtn" onclick="toggleTheme()"><div class="knob"></div></div>
@@ -205,13 +219,14 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);}
         </div>
       </div>
     </div>
-
     <!-- Ring -->
-    <div style="display:flex;justify-content:center;padding:8px 0 6px;">
-      <div style="position:relative;width:116px;height:116px;">
-        <svg width="116" height="116" viewBox="0 0 116 116" style="position:absolute;inset:0;">
-          <circle cx="58" cy="58" r="47" fill="none" stroke="var(--bdr)" stroke-width="8.5"/>
-          <circle cx="58" cy="58" r="47" fill="none" stroke="var(--acc)" stroke-width="8.5" stroke-linecap="round" stroke-dasharray="295.3" stroke-dashoffset="295.3" id="pring" style="transform:rotate(-90deg);transform-origin:58px 58px;transition:stroke-dashoffset .6s cubic-bezier(.4,0,.2,1),stroke .4s;"/>
+    <div style="display:flex;justify-content:center;padding:7px 0 5px;">
+      <div style="position:relative;width:114px;height:114px;">
+        <svg width="114" height="114" viewBox="0 0 114 114" style="position:absolute;inset:0;">
+          <circle cx="57" cy="57" r="46" fill="none" stroke="var(--bdr)" stroke-width="8.5"/>
+          <circle cx="57" cy="57" r="46" fill="none" stroke="var(--acc)" stroke-width="8.5" stroke-linecap="round"
+            stroke-dasharray="289" stroke-dashoffset="289" id="pring"
+            style="transform:rotate(-90deg);transform-origin:57px 57px;transition:stroke-dashoffset .6s cubic-bezier(.4,0,.2,1),stroke .4s;"/>
         </svg>
         <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;">
           <div style="font-size:30px;font-weight:800;color:var(--txt);letter-spacing:-1.5px;line-height:1;font-family:'DM Serif Display',serif;" id="pdone">0</div>
@@ -219,26 +234,22 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);}
         </div>
       </div>
     </div>
-
     <!-- Alerts -->
-    <div id="al-yday" style="display:none;margin:0 20px 10px;background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.2);border-radius:13px;padding:12px 14px;">
+    <div id="al-yday" style="display:none;margin:0 20px 10px;background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);border-radius:13px;padding:12px 14px;">
       <div style="display:flex;align-items:flex-start;gap:10px;">
         <span style="font-size:17px;flex-shrink:0;margin-top:1px;">⚠️</span>
         <div style="flex:1;"><div style="font-size:12.5px;font-weight:700;color:#F87171;margin-bottom:3px;">Yesterday incomplete</div><div style="font-size:11px;color:var(--sub);line-height:1.55;">Miss a day — start over from Day 1. That's the rule.</div></div>
         <button onclick="doReset()" style="background:var(--red);border:none;border-radius:8px;padding:7px 10px;font-size:11px;font-weight:700;color:white;cursor:pointer;font-family:'DM Sans',sans-serif;flex-shrink:0;">Restart</button>
       </div>
     </div>
-    <div id="al-done" style="display:none;margin:0 20px 10px;background:rgba(22,163,74,.06);border:1px solid rgba(22,163,74,.18);border-radius:13px;padding:14px 18px;text-align:center;">
+    <div id="al-done" style="display:none;margin:0 20px 10px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.18);border-radius:13px;padding:14px 18px;text-align:center;">
       <div style="font-size:26px;margin-bottom:6px;">🏆</div>
-      <div style="font-size:15px;font-weight:800;color:var(--grn2);font-family:'DM Serif Display',serif;">All 7 Complete!</div>
+      <div style="font-size:15px;font-weight:800;color:var(--grn);font-family:'DM Serif Display',serif;">All 7 Complete!</div>
       <div style="font-size:11px;color:var(--sub);margin-top:4px;">You showed up today. Streak extended. Keep going.</div>
     </div>
-
-    <div style="padding:4px 20px 8px;flex-shrink:0;"><div class="sh">Today's 7 Disciplines</div></div>
+    <div style="padding:4px 20px 8px;"><div class="sh">Today's 7 Disciplines</div></div>
     <div style="padding:0 20px 14px;"><div class="card" id="tlist"></div></div>
-
-    <!-- Water -->
-    <div style="padding:0 20px 8px;flex-shrink:0;"><div class="sh">Water · 1 Gallon</div></div>
+    <div style="padding:0 20px 8px;"><div class="sh">Water · 1 Gallon</div></div>
     <div style="padding:0 20px 24px;">
       <div class="card" style="padding:14px 16px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
@@ -251,36 +262,43 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);}
     </div>
   </div>
 
-  <!-- ═══ JOURNAL LIST ═══ -->
+  <!-- ═══ JOURNAL ═══ -->
   <div class="sc" id="s-journal">
-    <div style="padding:16px 20px 12px;display:flex;justify-content:space-between;align-items:center;">
+    <div style="padding:14px 20px 10px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
       <div>
-        <div style="font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Reflections</div>
+        <div style="font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px;">Reflections</div>
         <div style="font-size:24px;font-weight:800;color:var(--txt);letter-spacing:-.8px;font-family:'DM Serif Display',serif;">Journal</div>
       </div>
-      <button onclick="openJModal()" style="background:rgba(255,107,26,.1);border:1px solid rgba(255,107,26,.25);border-radius:12px;padding:9px 14px;font-size:12px;font-weight:700;color:var(--acc);cursor:pointer;font-family:'DM Sans',sans-serif;">+ Entry</button>
+      <button onclick="openJModal()" style="background:rgba(255,107,26,.1);border:1px solid rgba(255,107,26,.25);border-radius:12px;padding:9px 14px;font-size:12px;font-weight:700;color:var(--acc);cursor:pointer;font-family:'DM Sans',sans-serif;">+ Write</button>
     </div>
-    <div style="padding:0 20px 4px;" id="jcount-row"></div>
-    <div style="padding:4px 20px 24px;" id="jlist"></div>
+    <!-- Sub-tabs -->
+    <div style="padding:0 20px 12px;flex-shrink:0;">
+      <div style="display:flex;background:var(--c2);border-radius:12px;padding:3px;gap:2px;">
+        <div class="tab-pill on" id="tp-entries" onclick="switchTab('entries')">📝 Entries</div>
+        <div class="tab-pill" id="tp-photos" onclick="switchTab('photos')">📸 Photos</div>
+      </div>
+    </div>
+    <div id="jv-entries" style="padding:0 20px 28px;flex:1;overflow-y:auto;"></div>
+    <div id="jv-photos" style="display:none;padding:0 16px 28px;flex:1;overflow-y:auto;"></div>
   </div>
 
   <!-- ═══ JOURNEY ═══ -->
   <div class="sc" id="s-journey">
-    <div style="padding:16px 20px 10px;">
-      <div style="font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Progress</div>
+    <div style="padding:14px 20px 10px;">
+      <div style="font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px;">Progress</div>
       <div style="font-size:24px;font-weight:800;color:var(--txt);letter-spacing:-.8px;font-family:'DM Serif Display',serif;">My Journey</div>
       <div style="font-size:11.5px;color:var(--sub);margin-top:4px;" id="jsub">Day 1 of 75</div>
     </div>
-    <div style="padding:0 20px 13px;display:flex;gap:7px;">
-      <div style="flex:1;background:rgba(255,107,26,.07);border:.5px solid rgba(255,107,26,.18);border-radius:12px;padding:11px 5px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--acc);" id="jy-p">0%</div><div style="font-size:8px;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Done</div></div>
-      <div style="flex:1;background:rgba(22,163,74,.06);border:.5px solid rgba(22,163,74,.16);border-radius:12px;padding:11px 5px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--grn2);" id="jy-g">0</div><div style="font-size:8px;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Perfect</div></div>
-      <div style="flex:1;background:rgba(220,38,38,.06);border:.5px solid rgba(220,38,38,.16);border-radius:12px;padding:11px 5px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--red);" id="jy-r">0</div><div style="font-size:8px;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Missed</div></div>
-      <div style="flex:1;background:var(--c1);border:.5px solid var(--bdr);border-radius:12px;padding:11px 5px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--txt);" id="jy-l">75</div><div style="font-size:8px;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Left</div></div>
+    <div style="padding:0 20px 12px;display:flex;gap:7px;">
+      <div style="flex:1;background:rgba(255,107,26,.07);border:.5px solid rgba(255,107,26,.18);border-radius:12px;padding:10px 5px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--acc);" id="jy-p">0%</div><div style="font-size:8px;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Done</div></div>
+      <div style="flex:1;background:rgba(34,197,94,.06);border:.5px solid rgba(34,197,94,.16);border-radius:12px;padding:10px 5px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--grn);" id="jy-g">0</div><div style="font-size:8px;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Perfect</div></div>
+      <div style="flex:1;background:rgba(239,68,68,.06);border:.5px solid rgba(239,68,68,.16);border-radius:12px;padding:10px 5px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--red);" id="jy-r">0</div><div style="font-size:8px;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Missed</div></div>
+      <div style="flex:1;background:var(--c1);border:.5px solid var(--bdr);border-radius:12px;padding:10px 5px;text-align:center;"><div style="font-size:18px;font-weight:800;color:var(--txt);" id="jy-l">75</div><div style="font-size:8px;color:var(--sub);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;">Left</div></div>
     </div>
     <div style="padding:0 20px 8px;"><div class="sh">75-Day Grid</div></div>
     <div style="padding:0 20px 10px;"><div id="cgrid" style="display:grid;grid-template-columns:repeat(15,minmax(0,1fr));gap:4px;"></div></div>
-    <div style="padding:2px 20px 13px;display:flex;gap:12px;flex-wrap:wrap;">
-      <div style="display:flex;align-items:center;gap:5px;"><div style="width:9px;height:9px;border-radius:2px;background:var(--grn2);"></div><span style="font-size:10px;color:var(--sub);">Complete</span></div>
+    <div style="padding:2px 20px 12px;display:flex;gap:12px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:5px;"><div style="width:9px;height:9px;border-radius:2px;background:var(--grn);"></div><span style="font-size:10px;color:var(--sub);">Complete</span></div>
       <div style="display:flex;align-items:center;gap:5px;"><div style="width:9px;height:9px;border-radius:2px;background:var(--red);"></div><span style="font-size:10px;color:var(--sub);">Missed</span></div>
       <div style="display:flex;align-items:center;gap:5px;"><div style="width:9px;height:9px;border-radius:2px;background:var(--acc);"></div><span style="font-size:10px;color:var(--sub);">Today</span></div>
       <div style="display:flex;align-items:center;gap:5px;"><div style="width:9px;height:9px;border-radius:2px;background:var(--c2);border:.5px solid var(--bdr);"></div><span style="font-size:10px;color:var(--sub);">Ahead</span></div>
@@ -291,14 +309,14 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);}
 
   <!-- ═══ STATS ═══ -->
   <div class="sc" id="s-stats">
-    <div style="padding:16px 20px 12px;">
-      <div style="font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Overview</div>
+    <div style="padding:14px 20px 12px;">
+      <div style="font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:3px;">Overview</div>
       <div style="font-size:24px;font-weight:800;color:var(--txt);letter-spacing:-.8px;font-family:'DM Serif Display',serif;">Stats</div>
     </div>
     <div style="padding:0 20px 12px;display:flex;gap:8px;">
       <div class="scard"><div class="sv" style="color:var(--acc);" id="ss-s">0</div><div class="sl">Streak 🔥</div></div>
       <div class="scard"><div class="sv" id="ss-b">0</div><div class="sl">Best</div></div>
-      <div class="scard"><div class="sv" style="color:var(--grn2);" id="ss-d">0</div><div class="sl">Perfect Days</div></div>
+      <div class="scard"><div class="sv" style="color:var(--grn);" id="ss-d">0</div><div class="sl">Perfect Days</div></div>
     </div>
     <div style="padding:0 20px 12px;">
       <div class="card" style="padding:16px;">
@@ -308,84 +326,77 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);}
       </div>
     </div>
     <div style="padding:0 20px 8px;"><div class="sh">Discipline Rates</div></div>
-    <div style="padding:0 20px 13px;"><div class="card" id="ss-tasks"></div></div>
+    <div style="padding:0 20px 12px;"><div class="card" id="ss-tasks"></div></div>
     <div style="padding:0 20px 12px;">
       <div style="background:var(--c1);border:.5px solid var(--bdr);border-radius:var(--r);padding:18px;text-align:center;">
         <div style="font-size:17px;margin-bottom:9px;">✨</div>
-        <div style="font-size:14.5px;font-weight:500;color:var(--txt);line-height:1.7;font-family:'DM Serif Display',serif;font-style:italic;" id="ss-q">"Discipline is the bridge between goals and accomplishment."</div>
+        <div style="font-size:14.5px;font-weight:500;color:var(--txt);line-height:1.75;font-family:'DM Serif Display',serif;font-style:italic;" id="ss-q">"Discipline is the bridge between goals and accomplishment."</div>
       </div>
     </div>
     <div style="padding:0 20px 28px;text-align:center;">
-      <button onclick="confirmReset()" style="background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.18);border-radius:11px;padding:11px 26px;font-size:12.5px;font-weight:700;color:var(--red);cursor:pointer;font-family:'DM Sans',sans-serif;">Restart Challenge from Day 1</button>
+      <button onclick="confirmReset()" style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.18);border-radius:11px;padding:11px 26px;font-size:12.5px;font-weight:700;color:var(--red);cursor:pointer;font-family:'DM Sans',sans-serif;">Restart Challenge from Day 1</button>
     </div>
   </div>
 
-  <!-- ═══ JOURNAL MODAL ═══ -->
+  <!-- ═══ JOURNAL WRITE MODAL ═══ -->
   <div class="modal" id="m-journal">
-    <div class="drag-bar"><div></div></div>
-    <div style="padding:10px 20px 14px;display:flex;justify-content:space-between;align-items:flex-start;">
+    <div class="drag"><div></div></div>
+    <div style="padding:8px 20px 14px;display:flex;justify-content:space-between;align-items:flex-start;">
       <div><div style="font-size:9.5px;color:var(--sub);font-weight:700;letter-spacing:1px;text-transform:uppercase;" id="jm-sub">Day 1</div><div style="font-size:22px;font-weight:800;color:var(--txt);letter-spacing:-.6px;margin-top:3px;font-family:'DM Serif Display',serif;">Daily Check-In ✍️</div></div>
       <button onclick="closeModal('m-journal')" style="width:33px;height:33px;border-radius:50%;background:var(--c2);border:.5px solid var(--bdr);color:var(--sub);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">×</button>
     </div>
-    <div style="padding:0 20px 16px;">
-      <div class="fl">How are you feeling? *</div>
-      <div style="display:flex;gap:6px;" id="moodbtns">
-        <div class="mdbtn" data-m="0" onclick="selM(0)"><em>😔</em><s>Rough</s></div>
-        <div class="mdbtn" data-m="1" onclick="selM(1)"><em>😐</em><s>Okay</s></div>
-        <div class="mdbtn" data-m="2" onclick="selM(2)"><em>🙂</em><s>Good</s></div>
-        <div class="mdbtn" data-m="3" onclick="selM(3)"><em>😊</em><s>Great</s></div>
-        <div class="mdbtn" data-m="4" onclick="selM(4)"><em>🔥</em><s>Fired</s></div>
-      </div>
-    </div>
-    <div style="padding:0 20px 16px;">
-      <div class="fl">Energy Level</div>
-      <div style="display:flex;gap:8px;align-items:center;">
-        <div class="edot" data-e="1" onclick="selE(1)">1</div>
-        <div class="edot" data-e="2" onclick="selE(2)">2</div>
-        <div class="edot" data-e="3" onclick="selE(3)">3</div>
-        <div class="edot" data-e="4" onclick="selE(4)">4</div>
-        <div class="edot" data-e="5" onclick="selE(5)">5</div>
-        <span style="font-size:11px;color:var(--sub);margin-left:5px;" id="elbl">Select level</span>
-      </div>
-    </div>
+    <div style="padding:0 20px 16px;"><div class="fl">How are you feeling? *</div><div style="display:flex;gap:6px;" id="moodbtns"><div class="mdbtn" data-m="0" onclick="selM(0)"><em>😔</em><s>Rough</s></div><div class="mdbtn" data-m="1" onclick="selM(1)"><em>😐</em><s>Okay</s></div><div class="mdbtn" data-m="2" onclick="selM(2)"><em>🙂</em><s>Good</s></div><div class="mdbtn" data-m="3" onclick="selM(3)"><em>😊</em><s>Great</s></div><div class="mdbtn" data-m="4" onclick="selM(4)"><em>🔥</em><s>Fired</s></div></div></div>
+    <div style="padding:0 20px 16px;"><div class="fl">Energy Level</div><div style="display:flex;gap:8px;align-items:center;"><div class="edot" data-e="1" onclick="selE(1)">1</div><div class="edot" data-e="2" onclick="selE(2)">2</div><div class="edot" data-e="3" onclick="selE(3)">3</div><div class="edot" data-e="4" onclick="selE(4)">4</div><div class="edot" data-e="5" onclick="selE(5)">5</div><span style="font-size:11px;color:var(--sub);margin-left:5px;" id="elbl">Select level</span></div></div>
     <div style="padding:0 20px 14px;"><div class="fl">Today's Big Win 🏆</div><input class="finp" id="jwin" placeholder="What did you accomplish or feel proud of?" maxlength="160"/></div>
     <div style="padding:0 20px 14px;"><div class="fl">What Was Hard 💪</div><input class="finp" id="jhard" placeholder="What did you push through today?" maxlength="160"/></div>
-    <div style="padding:0 20px 14px;"><div class="fl">Reflection ✍️</div><textarea class="finp" id="jbody" placeholder="Write or talk about your day. What's changing in you? What are you learning?" rows="4" maxlength="800"></textarea></div>
+    <div style="padding:0 20px 14px;"><div class="fl">Reflection ✍️</div><textarea class="finp" id="jbody" placeholder="Write or talk about your day. What's changing? What are you learning?" rows="4" maxlength="800"></textarea></div>
     <div style="padding:0 20px 20px;"><div class="fl">Prayer / Gratitude 🙏</div><textarea class="finp" id="jgrat" placeholder="What are you grateful for? Any prayer or intention for tomorrow..." rows="2" maxlength="400"></textarea></div>
-    <div style="padding:0 20px 10px;"><button class="btn-primary" onclick="saveJournal()">Save Entry &amp; Check Off ✓</button></div>
+    <div style="padding:0 20px 10px;"><button class="btn-p" onclick="saveJournal()">Save Entry ✓</button></div>
   </div>
 
-  <!-- ═══ PHOTO MODAL ═══ -->
+  <!-- ═══ PHOTO CAPTURE MODAL ═══ -->
   <div class="modal" id="m-photo">
-    <div class="drag-bar"><div></div></div>
-    <div style="padding:10px 20px 12px;display:flex;justify-content:space-between;align-items:flex-start;">
+    <div class="drag"><div></div></div>
+    <div style="padding:8px 20px 12px;display:flex;justify-content:space-between;align-items:flex-start;">
       <div><div style="font-size:9.5px;color:var(--sub);font-weight:700;letter-spacing:1px;text-transform:uppercase;" id="pm-sub">Day 1</div><div style="font-size:22px;font-weight:800;color:var(--txt);letter-spacing:-.6px;margin-top:3px;font-family:'DM Serif Display',serif;">Progress Photo 📸</div></div>
       <button onclick="closeModal('m-photo')" style="width:33px;height:33px;border-radius:50%;background:var(--c2);border:.5px solid var(--bdr);color:var(--sub);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">×</button>
     </div>
-    <div style="padding:0 20px 12px;"><div style="font-size:12px;color:var(--sub);line-height:1.65;background:rgba(255,107,26,.05);border:.5px solid rgba(255,107,26,.14);border-radius:11px;padding:11px 14px;">📍 Same time · same pose · same spot every day. Consistency reveals transformation.</div></div>
+    <div style="padding:0 20px 12px;"><div style="font-size:12px;color:var(--sub);line-height:1.65;background:rgba(255,107,26,.05);border:.5px solid rgba(255,107,26,.14);border-radius:11px;padding:11px 14px;">📍 Same time · same pose · same spot every single day. Consistency reveals transformation.</div></div>
     <div style="padding:0 20px 14px;">
       <input type="file" id="photofile" accept="image/*" capture="environment" style="display:none;" onchange="onPhotoSel(this)"/>
       <div class="pu" id="pu-area" onclick="document.getElementById('photofile').click()">
         <div style="width:58px;height:58px;background:rgba(255,107,26,.1);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;">📸</div>
         <div style="font-size:14.5px;font-weight:700;color:var(--txt);text-align:center;">Take or Upload Photo</div>
-        <div style="font-size:11.5px;color:var(--sub);text-align:center;">Opens your camera or photo library</div>
+        <div style="font-size:11.5px;color:var(--sub);text-align:center;">Opens camera or photo library</div>
       </div>
       <div id="photo-preview" style="display:none;">
         <img id="photo-img" src="" style="width:100%;border-radius:14px;display:block;margin-bottom:10px;" alt="Preview"/>
-        <button onclick="clearPhoto()" style="width:100%;padding:10px;background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.18);border-radius:10px;font-size:12px;font-weight:700;color:var(--red);cursor:pointer;font-family:'DM Sans',sans-serif;">Remove &amp; Retake</button>
+        <button onclick="clearPhoto()" style="width:100%;padding:10px;background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.18);border-radius:10px;font-size:12px;font-weight:700;color:var(--red);cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px;">Remove &amp; Retake</button>
       </div>
     </div>
-    <div style="padding:0 20px 10px;"><button class="btn-primary" id="savephoto-btn" onclick="savePhoto()" disabled>Save Photo &amp; Check Off ✓</button></div>
+    <div style="padding:0 20px 10px;"><button class="btn-p" id="savephoto-btn" onclick="savePhoto()" disabled>Save Photo &amp; Check Off ✓</button></div>
   </div>
 
-  <!-- ═══ ENTRY VIEW ═══ -->
+  <!-- ═══ ENTRY VIEW MODAL ═══ -->
   <div class="modal" id="m-entry">
-    <div class="drag-bar"><div></div></div>
-    <div style="padding:10px 20px 14px;display:flex;justify-content:space-between;align-items:flex-start;">
+    <div class="drag"><div></div></div>
+    <div style="padding:8px 20px 14px;display:flex;justify-content:space-between;align-items:flex-start;">
       <div style="font-size:19px;font-weight:800;color:var(--txt);letter-spacing:-.5px;font-family:'DM Serif Display',serif;" id="ev-hdr">Entry</div>
       <button onclick="closeModal('m-entry')" style="width:33px;height:33px;border-radius:50%;background:var(--c2);border:.5px solid var(--bdr);color:var(--sub);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:10px;">×</button>
     </div>
     <div style="padding:0 20px 10px;" id="ev-body"></div>
+  </div>
+
+  <!-- ═══ PHOTO FULLSCREEN MODAL ═══ -->
+  <div class="modal" id="m-pview" style="background:#000;border-radius:0;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px 10px;">
+      <div id="pv-lbl" style="font-size:15px;font-weight:700;color:#fff;font-family:'DM Serif Display',serif;"></div>
+      <button onclick="closeModal('m-pview')" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">×</button>
+    </div>
+    <div style="padding:0 16px 20px;">
+      <img id="pv-img" src="" style="width:100%;border-radius:14px;display:block;" alt="Progress photo"/>
+      <div id="pv-info" style="margin-top:12px;font-size:12px;color:rgba(255,255,255,.45);text-align:center;"></div>
+    </div>
   </div>
 
   <div class="ov" id="overlay" onclick="closeAll()"></div>
@@ -393,7 +404,7 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);}
   <!-- NAV -->
   <nav id="bnav">
     <div class="ni act" id="n-today" onclick="goTo('today')">
-      <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M2 10L11 3l9 7v8a1 1 0 01-1 1H3a1 1 0 01-1-1v-8z" stroke="#5A5870" stroke-width="1.7"/><rect x="7.5" y="13.5" width="6" height="6.5" rx="1.2" stroke="#5A5870" stroke-width="1.7"/></svg>
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M2 10L11 3l9 7v8a1 1 0 01-1 1H3a1 1 0 01-1-1v-8z" stroke="#5A5870" stroke-width="1.7" fill="none"/><rect x="7.5" y="13.5" width="6" height="6.5" rx="1.2" stroke="#5A5870" stroke-width="1.7"/></svg>
       <span>Today</span>
     </div>
     <div class="ni" id="n-journal" onclick="goTo('journal')">
@@ -412,14 +423,13 @@ html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);}
 </div>
 
 <script>
-// ── DATA ──
 var TASKS=[
   {id:'wu',em:'🌅',name:'Wake Up & Morning Routine',sub:'Start the day with intention',col:'#F59E0B'},
   {id:'rd',em:'📖',name:'Read 10 Pages',sub:'Non-fiction · expand your mind',col:'#38BDF8'},
   {id:'ex',em:'💪',name:'Exercise 1 Hour',sub:'Train your body, build discipline',col:'#22C55E'},
   {id:'pr',em:'🙏',name:'Pray',sub:'Connect, reflect, give thanks',col:'#A78BFA'},
   {id:'sk',em:'🎯',name:'1 Hour Skill Work',sub:'Dedicate time to grow your craft',col:'#FF6B1A'},
-  {id:'jn',em:'✍️',name:'Daily Reflection',sub:'Tap to write your journal entry',col:'#F472B6'},
+  {id:'jn',em:'✍️',name:'Daily Reflection',sub:'Tap to write · add multiple entries',col:'#F472B6'},
   {id:'ph',em:'📸',name:'Progress Photo',sub:'Same time · same pose · every day',col:'#67E8F9'}
 ];
 var MOODS=[{em:'😔',col:'#EF4444',lbl:'Rough'},{em:'😐',col:'#8B8BAA',lbl:'Okay'},{em:'🙂',col:'#38BDF8',lbl:'Good'},{em:'😊',col:'#22C55E',lbl:'Great'},{em:'🔥',col:'#FF6B1A',lbl:'Fired Up'}];
@@ -431,51 +441,57 @@ var S={startDate:null,days:{},streak:0,best:0,day:1};
 var jform={mood:-1,energy:0};
 var pendingB64=null;
 var isLight=false;
+var curTab='entries';
+var _ddEntries=[];// temp store for day-detail entries
 
-// ── UTILS ──
+// ── STORAGE ──
+function lg(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+function ls(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+
+function loadJournals(date){
+  var r=lg('d7j_'+date);if(!r)return[];
+  try{var p=JSON.parse(r);return Array.isArray(p)?p:[p];}catch(e){return[];}
+}
+function saveJournals(date,arr){ls('d7j_'+date,JSON.stringify(arr));}
+function loadPhoto(date){return lg('d7p_'+date);}
+function storePhoto(date,b){ls('d7p_'+date,b);}
+
+// ── STATE ──
 function dk(d){return(d||new Date()).toISOString().split('T')[0];}
 function tod(){return dk();}
 function getTD(){var k=tod();if(!S.days[k])S.days[k]={wu:0,rd:0,ex:0,pr:0,sk:0,jn:0,ph:0,water:0};return S.days[k];}
 function isDone(d){return d&&TASKS.every(function(t){return d[t.id];});}
 function doneCount(d){if(!d)return 0;return TASKS.filter(function(t){return d[t.id];}).length;}
+function dayNum(date){if(!S.startDate)return 1;var d=Math.round((new Date(date)-new Date(S.startDate))/86400000)+1;return(d>=1&&d<=75)?d:'?';}
 function calcDay(){if(!S.startDate)return 1;return Math.max(1,Math.min(Math.floor((new Date()-new Date(S.startDate))/86400000)+1,75));}
 function calcStreak(){var s=0,t=new Date();for(var i=0;i<75;i++){var d2=new Date(t);d2.setDate(d2.getDate()-i);if(isDone(S.days[dk(d2)]))s++;else if(i>0)break;}return s;}
 function missedYday(){if(!S.startDate)return false;var y=new Date();y.setDate(y.getDate()-1);if(new Date(S.startDate)>y)return false;return!isDone(S.days[dk(y)]);}
 
-// ── STORAGE ──
-function lsGet(k){try{return localStorage.getItem(k);}catch(e){return null;}}
-function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
-
-async function load(){
-  var raw=lsGet('disc7v2');
-  if(raw)try{S=JSON.parse(raw);}catch(e){}
+function load(){
+  var r=lg('disc7v3');if(!r)r=lg('disc7v2');
+  if(r)try{S=JSON.parse(r);}catch(e){}
   if(!S.startDate)S.startDate=tod();
   S.day=calcDay();S.streak=calcStreak();if(S.streak>S.best)S.best=S.streak;
-  var th=lsGet('disc7th');if(th==='light')setTheme(true,false);
+  var th=lg('disc7th');if(th==='light')setTheme(true,false);
 }
-function save(){S.streak=calcStreak();if(S.streak>S.best)S.best=S.streak;S.day=calcDay();lsSet('disc7v2',JSON.stringify(S));}
-function saveJ(k,e){lsSet('d7j_'+k,JSON.stringify(e));}
-function loadJ(k){var r=lsGet('d7j_'+k);return r?JSON.parse(r):null;}
-function saveP(k,b){lsSet('d7p_'+k,b);}
-function loadP(k){return lsGet('d7p_'+k);}
+function save(){S.streak=calcStreak();if(S.streak>S.best)S.best=S.streak;S.day=calcDay();ls('disc7v3',JSON.stringify(S));}
 
 // ── ACTIONS ──
 function doReset(){S.startDate=tod();S.days={};S.streak=0;S.day=1;save();renderAll();}
-function confirmReset(){if(confirm('Restart your 7-discipline challenge from Day 1? All progress will be cleared.'))doReset();}
-
+function confirmReset(){if(confirm('Restart from Day 1? Task progress cleared. Journals + photos kept.'))doReset();}
 function toggleTheme(){setTheme(!isLight,true);}
 function setTheme(light,persist){
   isLight=light;
   document.getElementById('app').classList.toggle('lt',light);
-  document.getElementById('splash').classList.toggle('lt',light);
+  document.getElementById('splash').style.background=light?'#F5F2EB':'#07070F';
   document.getElementById('thbtn').classList.toggle('on',light);
   document.getElementById('th-icon').textContent=light?'☀️':'🌙';
-  document.querySelector('meta[name="theme-color"]').content=light?'#F7F4EE':'#FF6B1A';
-  if(persist)lsSet('disc7th',light?'light':'dark');
+  document.getElementById('tmeta').content=light?'#F5F2EB':'#07070F';
+  if(persist)ls('disc7th',light?'light':'dark');
 }
 
 function toggleTask(id){
-  if(id==='ph'){openPhoto();return;}
+  if(id==='ph'){openPhotoModal();return;}
   if(id==='jn'){openJModal();return;}
   var d=getTD();d[id]=d[id]?0:1;S.days[tod()]=d;save();renderToday();
 }
@@ -483,39 +499,62 @@ function setWater(n){var d=getTD();d.water=(d.water===n)?n-1:n;if(d.water<0)d.wa
 
 // ── MODALS ──
 function openModal(id){document.getElementById(id).classList.add('open');document.getElementById('overlay').classList.add('open');}
-function closeModal(id){document.getElementById(id).classList.remove('open');var any=['m-journal','m-photo','m-entry'].some(function(x){return x!==id&&document.getElementById(x).classList.contains('open');});if(!any)document.getElementById('overlay').classList.remove('open');}
-function closeAll(){['m-journal','m-photo','m-entry'].forEach(function(id){document.getElementById(id).classList.remove('open');});document.getElementById('overlay').classList.remove('open');}
+function closeModal(id){
+  document.getElementById(id).classList.remove('open');
+  var any=['m-journal','m-photo','m-entry','m-pview'].some(function(x){return x!==id&&document.getElementById(x).classList.contains('open');});
+  if(!any)document.getElementById('overlay').classList.remove('open');
+}
+function closeAll(){['m-journal','m-photo','m-entry','m-pview'].forEach(function(id){document.getElementById(id).classList.remove('open');});document.getElementById('overlay').classList.remove('open');}
 
+// ── JOURNAL FORM ──
 function selM(n){jform.mood=n;document.querySelectorAll('.mdbtn').forEach(function(b){b.classList.toggle('sel',+b.dataset.m===n);});}
 function selE(n){jform.energy=n;document.querySelectorAll('.edot').forEach(function(b){b.classList.toggle('on',+b.dataset.e<=n);});document.getElementById('elbl').textContent=ELABELS[n]||'';}
-
 function openJModal(){
-  document.getElementById('jm-sub').textContent='Day '+S.day;
-  var ex=loadJ(tod());
-  jform.mood=ex?ex.mood:-1;jform.energy=ex?ex.energy||0:0;
-  document.getElementById('jwin').value=ex?ex.win||'':'';
-  document.getElementById('jhard').value=ex?ex.hard||'':'';
-  document.getElementById('jbody').value=ex?ex.body||'':'';
-  document.getElementById('jgrat').value=ex?ex.grat||'':'';
-  document.querySelectorAll('.mdbtn').forEach(function(b){b.classList.toggle('sel',ex&&+b.dataset.m===ex.mood);});
-  document.querySelectorAll('.edot').forEach(function(b){b.classList.toggle('on',ex&&+b.dataset.e<=(ex.energy||0));});
-  document.getElementById('elbl').textContent=ex&&ex.energy?ELABELS[ex.energy]:'Select level';
+  var now=new Date();
+  document.getElementById('jm-sub').textContent='Day '+S.day+' · '+now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  jform.mood=-1;jform.energy=0;
+  ['jwin','jhard','jbody','jgrat'].forEach(function(id){document.getElementById(id).value='';});
+  document.querySelectorAll('.mdbtn').forEach(function(b){b.classList.remove('sel');});
+  document.querySelectorAll('.edot').forEach(function(b){b.classList.remove('on');});
+  document.getElementById('elbl').textContent='Select level';
   openModal('m-journal');
 }
 function saveJournal(){
   if(jform.mood<0){alert('Please pick your mood before saving.');return;}
-  var entry={mood:jform.mood,energy:jform.energy,win:document.getElementById('jwin').value.trim(),hard:document.getElementById('jhard').value.trim(),body:document.getElementById('jbody').value.trim(),grat:document.getElementById('jgrat').value.trim(),date:tod(),day:S.day};
-  saveJ(tod(),entry);
+  var now=new Date();
+  var entry={
+    id:now.getTime(),
+    ts:now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),
+    mood:jform.mood,energy:jform.energy,
+    win:document.getElementById('jwin').value.trim(),
+    hard:document.getElementById('jhard').value.trim(),
+    body:document.getElementById('jbody').value.trim(),
+    grat:document.getElementById('jgrat').value.trim(),
+    date:tod(),day:S.day
+  };
+  var existing=loadJournals(tod());
+  existing.push(entry);
+  saveJournals(tod(),existing);
   var d=getTD();d.jn=1;S.days[tod()]=d;save();
   closeModal('m-journal');renderToday();
 }
 
-function openPhoto(){
+// ── PHOTO MODAL ──
+function openPhotoModal(){
   document.getElementById('pm-sub').textContent='Day '+S.day;
   pendingB64=null;document.getElementById('photofile').value='';
-  var ex=loadP(tod());
-  if(ex){document.getElementById('photo-img').src=ex;document.getElementById('photo-preview').style.display='block';document.getElementById('pu-area').style.display='none';pendingB64=ex;var b=document.getElementById('savephoto-btn');b.disabled=false;b.style.opacity='1';}
-  else{document.getElementById('photo-preview').style.display='none';document.getElementById('pu-area').style.display='flex';var b=document.getElementById('savephoto-btn');b.disabled=true;b.style.opacity='.32';}
+  var ex=loadPhoto(tod());
+  if(ex){
+    document.getElementById('photo-img').src=ex;
+    document.getElementById('photo-preview').style.display='block';
+    document.getElementById('pu-area').style.display='none';
+    pendingB64=ex;
+    var b=document.getElementById('savephoto-btn');b.disabled=false;b.style.opacity='1';
+  }else{
+    document.getElementById('photo-preview').style.display='none';
+    document.getElementById('pu-area').style.display='flex';
+    var b=document.getElementById('savephoto-btn');b.disabled=true;b.style.opacity='.32';
+  }
   openModal('m-photo');
 }
 function onPhotoSel(inp){
@@ -524,87 +563,162 @@ function onPhotoSel(inp){
   reader.onload=function(ev){
     var img=new Image();
     img.onload=function(){
-      var c=document.createElement('canvas'),mw=600,ratio=Math.min(mw/img.width,mw/img.height,1);
+      var c=document.createElement('canvas'),mw=720,ratio=Math.min(mw/img.width,mw/img.height,1);
       c.width=Math.round(img.width*ratio);c.height=Math.round(img.height*ratio);
       c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-      pendingB64=c.toDataURL('image/jpeg',.8);
+      pendingB64=c.toDataURL('image/jpeg',.82);
       document.getElementById('photo-img').src=pendingB64;
       document.getElementById('photo-preview').style.display='block';
       document.getElementById('pu-area').style.display='none';
       var b=document.getElementById('savephoto-btn');b.disabled=false;b.style.opacity='1';
-    };
-    img.src=ev.target.result;
-  };
-  reader.readAsDataURL(inp.files[0]);
+    };img.src=ev.target.result;
+  };reader.readAsDataURL(inp.files[0]);
 }
-function clearPhoto(){pendingB64=null;document.getElementById('photofile').value='';document.getElementById('photo-preview').style.display='none';document.getElementById('pu-area').style.display='flex';var b=document.getElementById('savephoto-btn');b.disabled=true;b.style.opacity='.32';}
+function clearPhoto(){
+  pendingB64=null;document.getElementById('photofile').value='';
+  document.getElementById('photo-preview').style.display='none';
+  document.getElementById('pu-area').style.display='flex';
+  var b=document.getElementById('savephoto-btn');b.disabled=true;b.style.opacity='.32';
+}
 function savePhoto(){
   if(!pendingB64)return;
-  saveP(tod(),pendingB64);
+  storePhoto(tod(),pendingB64);
   var d=getTD();d.ph=1;S.days[tod()]=d;save();
   closeModal('m-photo');renderToday();
+}
+function viewPhoto(date,dn,info){
+  var ph=loadPhoto(date);if(!ph)return;
+  document.getElementById('pv-lbl').textContent='Day '+dn;
+  document.getElementById('pv-img').src=ph;
+  document.getElementById('pv-info').textContent=info;
+  openModal('m-pview');
 }
 
 // ── RENDER TODAY ──
 function renderToday(){
   var d=getTD(),cnt=doneCount(d),all=isDone(d);
-  var ring=document.getElementById('pring'),circ=295.3;
+  var ring=document.getElementById('pring'),circ=289;
   ring.style.strokeDashoffset=circ-(circ*cnt/7);
   ring.style.stroke=all?'#22C55E':'#FF6B1A';
   document.getElementById('pdone').textContent=cnt;
-  S.day=calcDay();
-  document.getElementById('hday').textContent=S.day;
+  S.day=calcDay();document.getElementById('hday').textContent=S.day;
   document.getElementById('str-num').textContent=S.streak;
-  var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],now=new Date();
-  document.getElementById('hdate').textContent=days[now.getDay()]+', '+months[now.getMonth()]+' '+now.getDate();
+  var dn=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],mn=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],now=new Date();
+  document.getElementById('hdate').textContent=dn[now.getDay()]+', '+mn[now.getMonth()]+' '+now.getDate();
   document.getElementById('al-yday').style.display=(missedYday()&&S.day>1)?'flex':'none';
   document.getElementById('al-done').style.display=all?'block':'none';
   var tl=document.getElementById('tlist');tl.innerHTML='';
   TASKS.forEach(function(t,i){
-    var done=!!d[t.id],isModal=t.id==='ph'||t.id==='jn';
+    var done=!!d[t.id],isM=t.id==='ph'||t.id==='jn';
     var el=document.createElement('div');
     el.className='ti'+(done?' done':'');
     el.setAttribute('role','button');el.setAttribute('tabindex','0');
-    el.setAttribute('aria-label',t.name+(done?' — done':isModal?' — tap to open':' — tap to complete'));
     el.onclick=(function(tid){return function(){toggleTask(tid);};})(t.id);
     el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')el.click();});
-    var numBadge='<div style="width:19px;height:19px;border-radius:50%;background:var(--c2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--sub);flex-shrink:0;margin-right:2px;">'+(i+1)+'</div>';
-    var openBadge=isModal&&!done?'<div style="font-size:9px;color:var(--acc);font-weight:800;background:rgba(255,107,26,.1);border:.5px solid rgba(255,107,26,.22);padding:3px 8px;border-radius:7px;white-space:nowrap;flex-shrink:0;">Open →</div>':'';
-    el.innerHTML=numBadge+'<div class="tic" style="background:'+(done?'rgba(34,197,94,.1)':'rgba(255,255,255,.05)')+';">'+t.em+'</div><div style="flex:1;min-width:0;"><div class="tin">'+t.name+'</div><div class="tis">'+t.sub+'</div></div>'+openBadge+'<div class="tck'+(done?' done':'')+'">'+(done?'<svg width="13" height="13" viewBox="0 0 13 13"><path d="M2 6.5l3 3 6-6" stroke="white" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>':'')+'</div>';
+    var num='<div style="width:19px;height:19px;border-radius:50%;background:var(--c2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--sub);flex-shrink:0;">'+(i+1)+'</div>';
+    var badge='';
+    if(isM&&!done)badge='<div style="font-size:9px;color:var(--acc);font-weight:800;background:rgba(255,107,26,.1);border:.5px solid rgba(255,107,26,.22);padding:3px 8px;border-radius:7px;white-space:nowrap;flex-shrink:0;">Open →</div>';
+    if(t.id==='jn'&&done){var jc=loadJournals(tod()).length;badge='<div style="font-size:9px;color:var(--grn);font-weight:800;background:rgba(34,197,94,.09);border:.5px solid rgba(34,197,94,.22);padding:3px 8px;border-radius:7px;white-space:nowrap;flex-shrink:0;">'+jc+(jc===1?' entry':' entries')+'</div>';}
+    el.innerHTML=num+'<div class="tic" style="background:'+(done?'rgba(34,197,94,.1)':'rgba(255,255,255,.05)')+';">'+t.em+'</div><div style="flex:1;min-width:0;"><div class="tin">'+t.name+'</div><div class="tis">'+t.sub+'</div></div>'+badge+'<div class="tck'+(done?' done':'')+'">'+(done?'<svg width="13" height="13" viewBox="0 0 13 13"><path d="M2 6.5l3 3 6-6" stroke="white" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>':'')+'</div>';
     tl.appendChild(el);
   });
-  // water
-  var w=(d.water||0);
+  var w=d.water||0;
   document.getElementById('wlbl').textContent=w+' / 8';
   document.getElementById('wbar').style.width=Math.round(w/8*100)+'%';
   var wb=document.getElementById('wbtns');wb.innerHTML='';
-  for(var i=1;i<=8;i++){(function(n){var g=document.createElement('div');g.className='wg'+(w>=n?' f':'');g.setAttribute('role','button');g.setAttribute('tabindex','0');g.setAttribute('aria-label','Glass '+n);g.innerHTML=w>=n?'<svg width="13" height="13" viewBox="0 0 13 13"><path d="M2 6.5l2.8 2.8 6.2-6.2" stroke="white" stroke-width="2.1" fill="none" stroke-linecap="round"/></svg>':'<span style="font-size:13px;">💧</span>';g.onclick=function(){setWater(n);};g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')g.click();});wb.appendChild(g);})(i);}
+  for(var i=1;i<=8;i++){(function(n){var g=document.createElement('div');g.className='wg'+(w>=n?' f':'');g.setAttribute('role','button');g.setAttribute('tabindex','0');g.innerHTML=w>=n?'<svg width="13" height="13" viewBox="0 0 13 13"><path d="M2 6.5l2.8 2.8 6.2-6.2" stroke="white" stroke-width="2.1" fill="none" stroke-linecap="round"/></svg>':'<span style="font-size:13px;">💧</span>';g.onclick=function(){setWater(n);};g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')g.click();});wb.appendChild(g);})(i);}
 }
 
-// ── RENDER JOURNAL ──
-function renderJournal(){
-  var entries=[],keys=Object.keys(S.days).sort().reverse();
-  for(var i=0;i<keys.length;i++){var k=keys[i];if(S.days[k]&&(S.days[k].jn||S.days[k].ph)){var e=loadJ(k);if(e)entries.push({k:k,e:e});}}
-  var cr=document.getElementById('jcount-row');
-  cr.innerHTML=entries.length?'<div style="font-size:10.5px;color:var(--sub);margin-bottom:4px;">'+entries.length+' '+(entries.length===1?'entry':'entries')+' — tap to read</div>':'';
-  var jl=document.getElementById('jlist');
-  if(!entries.length){jl.innerHTML='<div style="text-align:center;padding:50px 20px;"><div style="font-size:44px;margin-bottom:16px;">📓</div><div style="font-size:16px;font-weight:800;color:var(--txt);margin-bottom:8px;font-family:\'DM Serif Display\',serif;">Your story starts here</div><div style="font-size:12.5px;color:var(--sub);line-height:1.7;">Complete your daily reflection from the Today tab. Each entry is a chapter of your transformation.</div></div>';return;}
-  jl.innerHTML='';
-  for(var j=0;j<entries.length;j++){
-    var item=entries[j],e=item.e,m=MOODS[e.mood]||MOODS[2];
-    var card=document.createElement('div');
-    card.className='jc';card.style.borderLeftColor=m.col;
-    card.setAttribute('role','button');card.setAttribute('tabindex','0');
-    card.setAttribute('aria-label','Day '+e.day+' journal entry');
-    (function(key){card.onclick=function(){openEntry(key);};card.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' ')card.click();});})(item.k);
-    var snippet=(e.body&&e.body.trim())?e.body.substring(0,90)+(e.body.length>90?'…':''):(e.win?e.win.substring(0,90):'Tap to read this entry →');
-    var bars=[1,2,3,4,5].map(function(n){return '<div style="width:3.5px;height:'+(8+n*3)+'px;background:'+(e.energy&&n<=e.energy?'var(--acc)':'var(--c2)')+';;border-radius:2px;margin-top:auto;"></div>';}).join('');
-    card.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;"><div style="font-size:26px;flex-shrink:0;line-height:1;">'+m.em+'</div><div style="flex:1;min-width:0;"><div style="font-size:14px;font-weight:800;color:var(--txt);margin-bottom:2px;font-family:\'DM Serif Display\',serif;">Day '+e.day+'</div><div style="font-size:10.5px;color:var(--sub);">'+e.date+(e.energy?' · Energy '+e.energy+'/5':'')+'</div></div><div style="display:flex;align-items:flex-end;gap:2px;height:26px;">'+bars+'</div></div><div style="font-size:12.5px;color:var(--txt2);line-height:1.65;">'+snippet+'</div>'+(e.grat?'<div style="margin-top:9px;font-size:11px;color:var(--sub);">🙏 '+e.grat.substring(0,60)+(e.grat.length>60?'…':'')+'</div>':'');
-    jl.appendChild(card);
+// ── JOURNAL TABS ──
+function switchTab(tab){
+  curTab=tab;
+  document.getElementById('tp-entries').classList.toggle('on',tab==='entries');
+  document.getElementById('tp-photos').classList.toggle('on',tab==='photos');
+  document.getElementById('jv-entries').style.display=tab==='entries'?'block':'none';
+  document.getElementById('jv-photos').style.display=tab==='photos'?'block':'none';
+  if(tab==='photos')renderPhotoGallery();else renderJournalEntries();
+}
+
+function renderJournalEntries(){
+  var c=document.getElementById('jv-entries');c.innerHTML='';
+  var dates=Object.keys(S.days).sort().reverse();var hasAny=false;
+  dates.forEach(function(date,idx){
+    var entries=loadJournals(date);
+    if(!entries.length)return;
+    hasAny=true;
+    var dn=dayNum(date);
+    // Section header
+    var hdr=document.createElement('div');
+    hdr.style.cssText='font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;'+(idx>0?'margin-top:18px;':'');
+    hdr.textContent='Day '+dn+' · '+date;
+    c.appendChild(hdr);
+    // entries newest first
+    entries.slice().reverse().forEach(function(entry,ei){
+      var m=MOODS[entry.mood]||MOODS[2];
+      var card=document.createElement('div');
+      card.className='jc';card.style.borderLeftColor=m.col;
+      card.setAttribute('role','button');card.setAttribute('tabindex','0');
+      (function(e,d,n){
+        card.onclick=function(){openEntryView(e,n,d);};
+        card.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' ')card.click();});
+      })(entry,date,dn);
+      var snippet=(entry.body&&entry.body.trim())?entry.body.substring(0,80)+(entry.body.length>80?'…':''):(entry.win||'Tap to read →');
+      var bars=[1,2,3,4,5].map(function(n){return '<div style="width:3.5px;height:'+(8+n*3)+'px;background:'+(entry.energy&&n<=entry.energy?'var(--acc)':'var(--c2)')+';;border-radius:2px;margin-top:auto;"></div>';}).join('');
+      card.innerHTML='<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><div style="font-size:24px;flex-shrink:0;line-height:1;">'+m.em+'</div><div style="flex:1;min-width:0;"><div style="font-size:13.5px;font-weight:700;color:var(--txt);font-family:\'DM Serif Display\',serif;">'+m.lbl+'</div><div style="font-size:10.5px;color:var(--sub);">'+(entry.ts||'')+' · Energy '+(entry.energy||'—')+'/5</div></div><div style="display:flex;align-items:flex-end;gap:2px;height:26px;">'+bars+'</div></div><div style="font-size:12.5px;color:var(--txt2);line-height:1.65;">'+snippet+'</div>'+(entry.grat?'<div style="margin-top:8px;font-size:11px;color:var(--sub);">🙏 '+entry.grat.substring(0,60)+(entry.grat.length>60?'…':'')+'</div>':'');
+      c.appendChild(card);
+    });
+  });
+  if(!hasAny)c.innerHTML='<div style="text-align:center;padding:50px 20px;"><div style="font-size:44px;margin-bottom:16px;">📓</div><div style="font-size:16px;font-weight:800;color:var(--txt);margin-bottom:8px;font-family:\'DM Serif Display\',serif;">Your story starts here</div><div style="font-size:12.5px;color:var(--sub);line-height:1.7;">Complete your daily reflection from the Today tab. Each entry is a chapter of your transformation.</div></div>';
+}
+
+function renderPhotoGallery(){
+  var c=document.getElementById('jv-photos');c.innerHTML='';
+  var photoDates=Object.keys(S.days).sort().reverse().filter(function(d){return loadPhoto(d);});
+  if(!photoDates.length){c.innerHTML='<div style="text-align:center;padding:50px 20px;"><div style="font-size:44px;margin-bottom:16px;">📸</div><div style="font-size:16px;font-weight:800;color:var(--txt);margin-bottom:8px;font-family:\'DM Serif Display\',serif;">No photos yet</div><div style="font-size:12.5px;color:var(--sub);line-height:1.7;">Take your first progress photo from Today\'s tasks. Come back every day — the transformation will speak for itself.</div></div>';return;}
+  // Count banner
+  var banner=document.createElement('div');
+  banner.style.cssText='font-size:10.5px;color:var(--sub);margin-bottom:10px;';
+  banner.textContent=photoDates.length+' photo'+(photoDates.length===1?'':'s')+' · tap any to view full size';
+  c.appendChild(banner);
+  var grid=document.createElement('div');grid.className='pg';
+  photoDates.forEach(function(date){
+    var ph=loadPhoto(date);if(!ph)return;
+    var dn=dayNum(date);
+    var cell=document.createElement('div');cell.className='pg-cell';
+    cell.setAttribute('role','button');cell.setAttribute('tabindex','0');
+    cell.setAttribute('aria-label','Day '+dn+' progress photo');
+    (function(d,n){cell.onclick=function(){viewPhoto(d,n,d);};cell.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')cell.click();});})(date,dn);
+    var img=document.createElement('img');img.src=ph;img.alt='Day '+dn;img.loading='lazy';
+    var badge=document.createElement('div');badge.className='pg-day';badge.textContent='Day '+dn;
+    cell.appendChild(img);cell.appendChild(badge);grid.appendChild(cell);
+  });
+  c.appendChild(grid);
+}
+
+// ── ENTRY VIEW ──
+function openEntryView(entry,dn,date){
+  var photo=loadPhoto(date);
+  var m=MOODS[entry.mood]||MOODS[2];
+  document.getElementById('ev-hdr').textContent='Day '+dn+' · '+(entry.ts||date);
+  var html='';
+  html+='<div style="display:flex;gap:8px;margin-bottom:16px;">';
+  html+='<div style="flex:1;background:var(--c2);border-radius:12px;padding:13px 8px;text-align:center;border:.5px solid var(--bdr);"><div style="font-size:28px;margin-bottom:5px;">'+m.em+'</div><div style="font-size:12px;font-weight:700;color:'+m.col+';">'+m.lbl+'</div><div style="font-size:9px;color:var(--sub);margin-top:2px;text-transform:uppercase;letter-spacing:.5px;">Mood</div></div>';
+  if(entry.energy)html+='<div style="flex:1;background:var(--c2);border-radius:12px;padding:13px 8px;text-align:center;border:.5px solid var(--bdr);"><div style="font-size:24px;margin-bottom:5px;">'+['','😴','😐','💪','⚡','🔋'][Math.min(entry.energy,5)]+'</div><div style="font-size:13px;font-weight:800;color:var(--acc);">'+entry.energy+'/5</div><div style="font-size:9px;color:var(--sub);margin-top:2px;text-transform:uppercase;letter-spacing:.5px;">Energy</div></div>';
+  html+='</div>';
+  if(entry.energy)html+='<div style="margin-bottom:16px;background:var(--c2);border-radius:11px;padding:11px 14px;border:.5px solid var(--bdr);font-size:13px;color:var(--txt2);">'+BIOS[Math.min(entry.energy,5)]+'</div>';
+  if(photo){
+    var _d=date,_dn=dn;
+    html+='<div class="ev-sec"><div class="ev-lbl">Progress Photo 📸</div><img src="'+photo+'" style="width:100%;border-radius:13px;display:block;cursor:pointer;" onclick="viewPhoto(\''+_d+'\',\''+_dn+'\',\''+_d+'\')" alt="Progress photo"/></div>';
   }
+  if(entry.win)html+='<div class="ev-sec"><div class="ev-lbl">Big Win 🏆</div><div class="ev-box">'+entry.win+'</div></div>';
+  if(entry.hard)html+='<div class="ev-sec"><div class="ev-lbl">What Was Hard 💪</div><div class="ev-box">'+entry.hard+'</div></div>';
+  if(entry.body)html+='<div class="ev-sec"><div class="ev-lbl">Reflection ✍️</div><div class="ev-box" style="white-space:pre-wrap;">'+entry.body+'</div></div>';
+  if(entry.grat)html+='<div class="ev-sec"><div class="ev-lbl">Prayer / Gratitude 🙏</div><div class="ev-box">'+entry.grat+'</div></div>';
+  document.getElementById('ev-body').innerHTML=html;
+  openModal('m-entry');
 }
 
-// ── RENDER JOURNEY ──
+// ── JOURNEY ──
 function renderJourney(){
   var green=0,red=0,start=S.startDate?new Date(S.startDate):new Date(),todK=tod();
   var grid=document.getElementById('cgrid');grid.innerHTML='';
@@ -613,15 +727,13 @@ function renderJourney(){
     var isPast=ddk<todK,isToday=ddk===todK,isFut=ddk>todK;
     var data=S.days[ddk],comp=data&&isDone(data),missed=isPast&&!comp;
     if(comp)green++;if(missed)red++;
-    var bg=isFut?'var(--c2)':isToday?'var(--acc)':comp?'var(--grn2)':'var(--red)';
+    var bg=isFut?'var(--c2)':isToday?'var(--acc)':comp?'var(--grn)':'var(--red)';
     var col=isFut?'var(--sub)':isToday?'#000':comp?'#031508':'#1a0404';
     var el=document.createElement('div');
-    el.className='cgrid-item';
-    el.style.cssText='background:'+bg+';color:'+col+';border:'+(isFut?'.5px solid var(--bdr)':'none')+';';
-    el.textContent=i+1;
-    el.setAttribute('role','button');el.setAttribute('tabindex','0');
-    el.setAttribute('aria-label','Day '+(i+1)+(comp?' complete':missed?' missed':isToday?' today':''));
-    (function(key,n,c,ms){el.onclick=function(){showDD(key,n,c,ms);};el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')el.click();});})(ddk,i+1,comp,missed);
+    el.style.cssText='width:100%;aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;cursor:pointer;border:'+(isFut?'.5px solid var(--bdr)':'none')+';background:'+bg+';color:'+col+';transition:transform .1s;';
+    el.textContent=i+1;el.setAttribute('role','button');el.setAttribute('tabindex','0');
+    el.onmouseover=function(){this.style.transform='scale(1.2)';};el.onmouseout=function(){this.style.transform='';};
+    (function(key,n){el.onclick=function(){showDD(key,n);};el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')el.click();});})(ddk,i+1);
     grid.appendChild(el);
   }
   document.getElementById('jy-p').textContent=Math.round(green/75*100)+'%';
@@ -631,43 +743,27 @@ function renderJourney(){
   document.getElementById('jsub').textContent='Day '+S.day+' of 75 · Started '+S.startDate;
 }
 
-function showDD(k,n,comp,missed){
+function showDD(date,n){
   document.getElementById('ddhead').style.display='block';
-  var det=document.getElementById('ddetail'),d=S.days[k];
+  var det=document.getElementById('ddetail'),d=S.days[date];
   if(!d){det.innerHTML='<div class="card" style="padding:14px 16px;text-align:center;font-size:12.5px;color:var(--sub);">No data for Day '+n+'</div>';return;}
   var rows='';
-  TASKS.forEach(function(t,i){var done=!!d[t.id];rows+='<div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:'+(i===TASKS.length-1?'none':'.5px solid var(--bdr)')+'"><span style="font-size:16px;">'+t.em+'</span><span style="font-size:12.5px;flex:1;color:'+(done?'var(--txt)':'var(--sub)')+';">'+t.name+'</span><span style="font-size:14px;font-weight:700;color:'+(done?'var(--grn2)':'var(--red)')+';">'+(done?'✓':'✗')+'</span></div>';});
-  var je=loadJ(k),jp=loadP(k);
+  TASKS.forEach(function(t,i){var done=!!d[t.id];rows+='<div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:'+(i===TASKS.length-1?'none':'.5px solid var(--bdr)')+'"><span style="font-size:16px;">'+t.em+'</span><span style="font-size:12.5px;flex:1;color:'+(done?'var(--txt)':'var(--sub)')+';">'+t.name+'</span><span style="font-size:14px;font-weight:700;color:'+(done?'var(--grn)':'var(--red)')+';">'+(done?'✓':'✗')+'</span></div>';});
+  var entries=loadJournals(date),photo=loadPhoto(date);
+  // store globally for onclick
+  _ddEntries=entries;
   var extra='';
-  if(je){var m=MOODS[je.mood]||MOODS[2];extra='<div style="margin-top:9px;background:var(--c1);border-radius:13px;padding:13px 16px;border:.5px solid var(--bdr);cursor:pointer;" onclick="openEntry(\''+k+'\')"><div style="font-size:9px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:9px;">Journal Entry</div><div style="display:flex;align-items:center;gap:10px;"><span style="font-size:22px;">'+m.em+'</span><div><div style="font-size:12.5px;font-weight:700;color:var(--txt);">'+m.lbl+(je.energy?' · Energy '+je.energy+'/5':'')+'</div><div style="font-size:11px;color:var(--sub);margin-top:2px;">Tap to read full entry →</div></div></div></div>';}
+  if(entries.length){
+    var m=MOODS[entries[entries.length-1].mood]||MOODS[2];
+    extra='<div style="margin-top:9px;background:var(--c1);border-radius:13px;padding:13px 16px;border:.5px solid var(--bdr);cursor:pointer;" onclick="openEntryView(_ddEntries[_ddEntries.length-1],'+n+',\''+date+'\')">'
+      +'<div style="font-size:9px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Journal'+(entries.length>1?' ('+entries.length+' entries)':'')+'</div>'
+      +'<div style="display:flex;align-items:center;gap:10px;"><span style="font-size:22px;">'+m.em+'</span><div><div style="font-size:12.5px;font-weight:700;color:var(--txt);">'+m.lbl+(entries[entries.length-1].energy?' · Energy '+entries[entries.length-1].energy+'/5':'')+'</div><div style="font-size:11px;color:var(--sub);margin-top:2px;">Tap to read →</div></div></div></div>';
+  }
+  if(photo)extra+='<div style="margin-top:9px;cursor:pointer;" onclick="viewPhoto(\''+date+'\','+n+',\''+date+'\')">'+'<img src="'+photo+'" style="width:100%;border-radius:13px;display:block;" alt="Day '+n+' photo"/></div>';
   det.innerHTML='<div class="card">'+rows+'</div>'+extra;
 }
 
-function openEntry(k){
-  var entry=loadJ(k),photo=loadP(k);
-  if(!entry&&!photo)return;
-  var m=entry?MOODS[entry.mood]||MOODS[2]:null;
-  document.getElementById('ev-hdr').textContent='Day '+(entry?entry.day:'')+(entry?' · '+entry.date:k);
-  var html='';
-  if(m){
-    html+='<div style="display:flex;gap:8px;margin-bottom:16px;">';
-    html+='<div style="flex:1;background:var(--c2);border-radius:12px;padding:13px 8px;text-align:center;border:.5px solid var(--bdr);"><div style="font-size:28px;margin-bottom:5px;">'+m.em+'</div><div style="font-size:12px;font-weight:700;color:'+m.col+';">'+m.lbl+'</div><div style="font-size:9px;color:var(--sub);margin-top:2px;text-transform:uppercase;letter-spacing:.5px;">Mood</div></div>';
-    if(entry&&entry.energy)html+='<div style="flex:1;background:var(--c2);border-radius:12px;padding:13px 8px;text-align:center;border:.5px solid var(--bdr);"><div style="font-size:24px;margin-bottom:5px;">'+['','😴','😐','💪','⚡','🔋'][Math.min(entry.energy,5)]+'</div><div style="font-size:13px;font-weight:800;color:var(--acc);">'+entry.energy+'/5</div><div style="font-size:9px;color:var(--sub);margin-top:2px;text-transform:uppercase;letter-spacing:.5px;">Energy</div></div>';
-    html+='</div>';
-    if(entry&&entry.energy)html+='<div style="margin-bottom:16px;background:var(--c2);border-radius:11px;padding:11px 14px;border:.5px solid var(--bdr);"><div style="font-size:10px;color:var(--sub);margin-bottom:5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;">Vibe</div><div style="font-size:13px;color:var(--txt);">'+BIOS[Math.min(entry.energy,5)]+'</div></div>';
-  }
-  if(photo)html+='<div class="ev-sec"><div class="ev-lbl">Progress Photo 📸</div><img src="'+photo+'" style="width:100%;border-radius:13px;display:block;" alt="Progress photo"/></div>';
-  if(entry){
-    if(entry.win)html+='<div class="ev-sec"><div class="ev-lbl">Big Win 🏆</div><div class="ev-box">'+entry.win+'</div></div>';
-    if(entry.hard)html+='<div class="ev-sec"><div class="ev-lbl">What Was Hard 💪</div><div class="ev-box">'+entry.hard+'</div></div>';
-    if(entry.body)html+='<div class="ev-sec"><div class="ev-lbl">Reflection ✍️</div><div class="ev-box" style="white-space:pre-wrap;">'+entry.body+'</div></div>';
-    if(entry.grat)html+='<div class="ev-sec"><div class="ev-lbl">Prayer / Gratitude 🙏</div><div class="ev-box">'+entry.grat+'</div></div>';
-  }
-  document.getElementById('ev-body').innerHTML=html;
-  openModal('m-entry');
-}
-
-// ── RENDER STATS ──
+// ── STATS ──
 function renderStats(){
   document.getElementById('ss-s').textContent=S.streak;
   document.getElementById('ss-b').textContent=S.best;
@@ -701,7 +797,7 @@ function goTo(sc){
       if(p.getAttribute('fill')&&p.getAttribute('fill')!=='none'&&p.getAttribute('fill')!=='white')p.setAttribute('fill',act?'#FF6B1A':'#5A5870');
     });
   });
-  if(sc==='journal')renderJournal();
+  if(sc==='journal'){renderJournalEntries();if(curTab==='photos')renderPhotoGallery();}
   if(sc==='journey')renderJourney();
   if(sc==='stats')renderStats();
 }
@@ -710,26 +806,14 @@ function goTo(sc){
 function tick(){var n=new Date();document.getElementById('clk').textContent=n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');setTimeout(tick,20000);}
 
 // ── SERVICE WORKER ──
-if('serviceWorker' in navigator){
-  window.addEventListener('load',function(){
-    navigator.serviceWorker.register('/project-50/sw.js').catch(function(){});
-  });
-}
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/project-50/sw.js').catch(function(){});});}
 
 // ── KEYBOARD ──
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAll();});
 
 // ── BOOT ──
-load();
-renderAll();
-tick();
-
-// Dismiss splash after 2.2s
-setTimeout(function(){
-  var sp=document.getElementById('splash');
-  sp.classList.add('hide');
-  setTimeout(function(){sp.style.display='none';},500);
-},2200);
+load();renderAll();tick();
+setTimeout(function(){var sp=document.getElementById('splash');sp.classList.add('out');setTimeout(function(){sp.style.display='none';},520);},2500);
 </script>
 </body>
 </html>
