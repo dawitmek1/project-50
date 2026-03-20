@@ -1,5 +1,16 @@
-const CACHE='disc7-v3';
-const ASSETS=['/project-50/','/project-50/index.html','/project-50/manifest.json'];
-self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));self.skipWaiting();});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
-self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).catch(()=>caches.match('/project-50/index.html'))));});
+{
+  "name":"7 Disciplines — Daily Tracker",
+  "short_name":"7 Disciplines",
+  "description":"Your daily 7-discipline tracker. Wake up, read, exercise, pray, skill work, reflect, photo.",
+  "start_url":"/project-50/",
+  "scope":"/project-50/",
+  "display":"standalone",
+  "orientation":"portrait",
+  "background_color":"#07070F",
+  "theme_color":"#FF6B1A",
+  "icons":[
+    {"src":"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%2307070F'/%3E%3Ccircle cx='256' cy='256' r='190' fill='none' stroke='%23FF6B1A' stroke-width='22' opacity='.25'/%3E%3Ccircle cx='256' cy='256' r='190' fill='none' stroke='%23FF6B1A' stroke-width='22' stroke-dasharray='1194' stroke-dashoffset='299' transform='rotate(-90 256 256)' stroke-linecap='round'/%3E%3Ctext x='256' y='228' text-anchor='middle' font-size='140' font-family='Georgia,serif' fill='%23F2EEF8' font-weight='700'%3E7%3C/text%3E%3Ctext x='256' y='318' text-anchor='middle' font-size='58' font-family='system-ui' fill='%23FF6B1A' font-weight='800' letter-spacing='6'%3EDAYS%3C/text%3E%3C/svg%3E","sizes":"512x512","type":"image/svg+xml","purpose":"any maskable"}
+  ],
+  "categories":["health","fitness","lifestyle","productivity"],
+  "lang":"en-US"
+}
